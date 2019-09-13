@@ -16,16 +16,21 @@ public class Tester {
         URI baseURI = UriBuilder.fromUri("http://localhost:9090/students").build();
         WebTarget serviceTarget = client.target(baseURI);
 
-        Builder requestBuilder = serviceTarget.path("hello").request().accept(MediaType.TEXT_PLAIN);
+        Builder requestBuilder = serviceTarget.path("count").request().accept(MediaType.TEXT_PLAIN);
         Response response = requestBuilder.get();
 
-        if(response.getStatus() == 200) {
-            String entity = response.readEntity(String.class);
+        if(response.getStatus() == Response.Status.OK.getStatusCode()) {
+            Integer entity = response.readEntity(Integer.class);
+            // String entity = response.readEntity(String.class);
             System.out.println("The service response is: " + entity);
         } else{
-            System.out.println("ERROR: cannot get Hello! " + response);
-            String entity = response.readEntity(String.class);
-            System.out.println(entity);
+            printError(response);
         }
+    }
+
+    private static void printError(Response response) {
+        System.out.println("ERROR: cannot get Hello! " + response);
+        // String entity = response.readEntity(String.class);
+        // System.out.println(entity);
     }
 }
