@@ -20,18 +20,35 @@ public class StudentsResources {
         studentList.add(new Student(3, "Miranda Winslet"));
     }
 
-    @GET //GET at http://localhost:XXXX/students/hello
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Student> getAllStudents() {
+        return studentList;
+    }
+
+    @GET
     @Path("hello")
     @Produces({MediaType.TEXT_PLAIN})
     public String sayHello() {
-        return "Hello, your service works !";
+        return "Hello, your service works!";
     }
 
-    @GET //GET at http://localhost:XXXX/students/count
+    @GET
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public int getNumberOfStudents() {
         return studentList.size();
+    }
+
+    @GET
+    @Path("first")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Student GetFirstStudent() {
+        if (studentList.size() > 0){
+            return studentList.get(0);
+        }else {
+            throw new RuntimeException("There are 0 students");
+        }
     }
 
 }
