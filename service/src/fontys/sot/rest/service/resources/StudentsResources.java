@@ -35,6 +35,16 @@ public class StudentsResources {
         }
     }
 
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    public void createStudent(Student student) {
+        if(!students.exists(student.getId())){
+            students.add(student);
+        }else{
+            throw new RuntimeException("Student wit id " + student.getId() + " already exist");
+        }
+    }
+
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})

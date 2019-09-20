@@ -2,6 +2,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -12,6 +13,8 @@ import java.net.URI;
 public class Tester {
 
     public static void main(String[] args) {
+        test("http://localhost:9090/students");
+        test("POST", "http://localhost:9090/students", "{\"id\":3,\"name\":\"Maurici Abad\"}");
         test("http://localhost:9090/students");
         test("http://localhost:9090/students/2");
         test("DELETE", "http://localhost:9090/students/2");
@@ -40,12 +43,12 @@ public class Tester {
         Builder requestBuilder = serviceTarget.request();
         Response response;
         switch (method){
-//            case "POST":
-//                response = requestBuilder.post(body);
-//                break;
-//            case "PUT":
-//                response = requestBuilder.put(body);
-//                break;
+            case "POST":
+                response = requestBuilder.post(Entity.entity(body, MediaType.APPLICATION_JSON));
+                break;
+            case "PUT":
+                response = requestBuilder.put(Entity.entity(body, MediaType.APPLICATION_JSON));
+                break;
             case "DELETE":
                 response = requestBuilder.delete();
                 break;
