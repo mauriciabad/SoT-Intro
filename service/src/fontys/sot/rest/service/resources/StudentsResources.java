@@ -5,6 +5,7 @@ import fontys.sot.rest.service.model.Student;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +16,27 @@ public class StudentsResources {
     private List<Student> studentList = new ArrayList<>();
 
     public StudentsResources() {
-        studentList.add(new Student(1, "Joe Smith"));
-        studentList.add(new Student(2, "Ann Johnsson"));
-        studentList.add(new Student(3, "Miranda Winslet"));
+        // To simplify getters, we create a list of students
+        // where the index and id are the same.
+        studentList.add(new Student(0, "Joe Smith"));
+        studentList.add(new Student(1, "Ann Johnsson"));
+        studentList.add(new Student(2, "Miranda Winslet"));
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Student> getAllStudents() {
-        return studentList;
+    public List<Student> getStudentByQuery(@QueryParam("id") Integer id) {
+        if (id != null) {
+            if (id < studentList.size()) {
+                List<Student> filteredStudentList = new ArrayList<Student>();
+                filteredStudentList.add(studentList.get(id));
+                return filteredStudentList;
+            } else {
+                throw new RuntimeException("Student wit id " + id + " doesn't exist");
+            }
+        }else{
+            return studentList;
+        }
     }
 
     @GET
