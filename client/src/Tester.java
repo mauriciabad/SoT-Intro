@@ -13,6 +13,7 @@ public class Tester {
 
     public static void main(String[] args) {
         test("http://localhost:9090/students");
+        test("http://localhost:9090/students/2");
         test("http://localhost:9090/students?id=2");
         test("http://localhost:9090/students/first");
         test("http://localhost:9090/students/hello");

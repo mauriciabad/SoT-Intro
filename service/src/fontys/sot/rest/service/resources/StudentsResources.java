@@ -2,10 +2,7 @@ package fontys.sot.rest.service.resources;
 
 import fontys.sot.rest.service.model.Student;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +33,17 @@ public class StudentsResources {
             }
         }else{
             return studentList;
+        }
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Student getStudentByQuery(@PathParam("id") int id) {
+        if (id < studentList.size()) {
+            return studentList.get(id);
+        } else {
+            throw new RuntimeException("Student wit id " + id + " doesn't exist");
         }
     }
 
