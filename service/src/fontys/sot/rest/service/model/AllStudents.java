@@ -32,7 +32,10 @@ public class AllStudents {
     }
 
     public void add(Student student) {
-        if (!this.exists(student.getId())){
+        Student oldStudent = this.get(student.getId());
+        if (oldStudent != null){
+            oldStudent.setName(student.getName());
+        }else{
             students.add(student);
         }
     }

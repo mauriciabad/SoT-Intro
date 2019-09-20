@@ -41,7 +41,27 @@ public class StudentsResources {
         if(!students.exists(student.getId())){
             students.add(student);
         }else{
-            throw new RuntimeException("Student wit id " + student.getId() + " already exist");
+            throw new RuntimeException("Student with id " + student.getId() + " already exist");
+        }
+    }
+
+    @POST
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    public void createStudent(@FormParam("id") int id, @FormParam("name") String name) {
+        if(!students.exists(id)){
+            students.add(new Student(id, name));
+        }else{
+            throw new RuntimeException("Student with id " + id + " already exist");
+        }
+    }
+
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    public void updateStudent(Student student) {
+        if(students.exists(student.getId())){
+            students.add(student);
+        }else{
+            throw new RuntimeException("Student with id " + student.getId() + " doesn't exist");
         }
     }
 
@@ -52,7 +72,7 @@ public class StudentsResources {
         if (students.exists(id)) {
             return students.get(id);
         } else {
-            throw new RuntimeException("Student wit id " + id + " doesn't exist");
+            throw new RuntimeException("Student with id " + id + " doesn't exist");
         }
     }
 
@@ -83,7 +103,7 @@ public class StudentsResources {
         if (students.exists(0)){
             return students.get(0);
         }else {
-            throw new RuntimeException("Student wit id 0 doesn't exist");
+            throw new RuntimeException("Student with id 0 doesn't exist");
         }
     }
 

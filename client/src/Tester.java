@@ -15,6 +15,7 @@ public class Tester {
     public static void main(String[] args) {
         test("http://localhost:9090/students");
         test("POST", "http://localhost:9090/students", "{\"id\":3,\"name\":\"Maurici Abad\"}");
+        test("PUT", "http://localhost:9090/students", "{\"id\":0,\"name\":\"Maurici Abad\"}");
         test("http://localhost:9090/students");
         test("http://localhost:9090/students/2");
         test("DELETE", "http://localhost:9090/students/2");
