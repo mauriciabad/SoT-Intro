@@ -1,5 +1,6 @@
 package fontys.sot.rest.service.resources;
 
+import fontys.sot.rest.service.model.AllStudents;
 import fontys.sot.rest.service.model.Student;
 
 import javax.ws.rs.*;
@@ -10,29 +11,27 @@ import java.util.List;
 @Path("students")
 public class StudentsResources {
 
-    private List<Student> studentList = new ArrayList<>();
+    private AllStudents students = new AllStudents();
 
     public StudentsResources() {
-        // To simplify getters, we create a list of students
-        // where the index and id are the same.
-        studentList.add(new Student(0, "Joe Smith"));
-        studentList.add(new Student(1, "Ann Johnsson"));
-        studentList.add(new Student(2, "Miranda Winslet"));
+        students.add(new Student(0, "Joe Smith"));
+        students.add(new Student(1, "Ann Johnsson"));
+        students.add(new Student(2, "Miranda Winslet"));
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<Student> getStudentByQuery(@QueryParam("id") Integer id) {
         if (id != null) {
-            if (id < studentList.size()) {
+            if (students.exists(id)) {
                 List<Student> filteredStudentList = new ArrayList<Student>();
-                filteredStudentList.add(studentList.get(id));
+                filteredStudentList.add(students.get(id));
                 return filteredStudentList;
             } else {
                 throw new RuntimeException("Student wit id " + id + " doesn't exist");
             }
         }else{
-            return studentList;
+            return students.getAll();
         }
     }
 
@@ -40,11 +39,17 @@ public class StudentsResources {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Student getStudentByQuery(@PathParam("id") int id) {
-        if (id < studentList.size()) {
-            return studentList.get(id);
+        if (students.exists(id)) {
+            return students.get(id);
         } else {
             throw new RuntimeException("Student wit id " + id + " doesn't exist");
         }
+    }
+
+    @DELETE
+    @Path("{id}")
+    public void deleteStudent(@PathParam("id") int id) {
+         students.remove(id);
     }
 
     @GET
@@ -58,17 +63,17 @@ public class StudentsResources {
     @Path("count")
     @Produces({MediaType.TEXT_PLAIN})
     public int getNumberOfStudents() {
-        return studentList.size();
+        return students.total();
     }
 
     @GET
     @Path("first")
     @Produces({MediaType.APPLICATION_JSON})
     public Student GetFirstStudent() {
-        if (studentList.size() > 0){
-            return studentList.get(0);
+        if (students.exists(0)){
+            return students.get(0);
         }else {
-            throw new RuntimeException("There are 0 students");
+            throw new RuntimeException("Student wit id 0 doesn't exist");
         }
     }
 

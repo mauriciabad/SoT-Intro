@@ -14,6 +14,7 @@ public class Tester {
     public static void main(String[] args) {
         test("http://localhost:9090/students");
         test("http://localhost:9090/students/2");
+        test("DELETE", "http://localhost:9090/students/2");
         test("http://localhost:9090/students?id=2");
         test("http://localhost:9090/students/first");
         test("http://localhost:9090/students/hello");
@@ -22,29 +23,55 @@ public class Tester {
     }
 
     public static int test(String url) {
-        return test(url, "GET", null);
+        return test("GET", url, "");
     }
 
-    public static int test(String url, String method, String body){
+    public static int test(String method, String url) {
+        return test(method, url, "");
+    }
+
+    public static int test(String method, String url, String body){
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
 
         URI baseURI = UriBuilder.fromUri(url).build();
         WebTarget serviceTarget = client.target(baseURI);
 
-        Builder requestBuilder = serviceTarget.path("").request();
-        Response response = requestBuilder.get();
+        Builder requestBuilder = serviceTarget.request();
+        Response response;
+        switch (method){
+//            case "POST":
+//                response = requestBuilder.post(body);
+//                break;
+//            case "PUT":
+//                response = requestBuilder.put(body);
+//                break;
+            case "DELETE":
+                response = requestBuilder.delete();
+                break;
+            case "HEAD":
+                response = requestBuilder.head();
+                break;
+            case "GET":
+            default:
+                response = requestBuilder.get();
+                break;
+        }
+
+
+        int status = response.getStatus();
 
         System.out.println();
         System.out.println(method + " " + url);
+        System.out.print(status + " ");
 
-        if(response.getStatus() == Response.Status.OK.getStatusCode()) {
+        if(status >= 200 && status < 300 ) {
             String entity = response.readEntity(String.class);
             System.out.println(entity);
         } else{
-            System.out.println(response);
+            System.out.println(response.getStatusInfo().getReasonPhrase());
         }
 
-        return response.getStatus();
+        return status;
     }
 }
