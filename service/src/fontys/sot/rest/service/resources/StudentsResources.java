@@ -5,6 +5,7 @@ import fontys.sot.rest.service.model.Student;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,22 +58,23 @@ public class StudentsResources {
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
-    public void updateStudent(Student student) {
+    public Response updateStudent(Student student) {
         if(students.exists(student.getId())){
             students.add(student);
+            return Response.noContent().build();
         }else{
-            throw new RuntimeException("Student with id " + student.getId() + " doesn't exist");
+            return Response.serverError().entity("Student with id " + student.getId() + " doesn't exist").build();
         }
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Student getStudentByQuery(@PathParam("id") int id) {
+    public Response getStudentByQuery(@PathParam("id") int id) {
         if (students.exists(id)) {
-            return students.get(id);
+            return Response.ok().entity(students.get(id)).build();
         } else {
-            throw new RuntimeException("Student with id " + id + " doesn't exist");
+            return Response.serverError().entity("Student with id " + id + " doesn't exist").build();
         }
     }
 
@@ -99,11 +101,11 @@ public class StudentsResources {
     @GET
     @Path("first")
     @Produces({MediaType.APPLICATION_JSON})
-    public Student GetFirstStudent() {
+    public Response GetFirstStudent() {
         if (students.exists(0)){
-            return students.get(0);
+            return Response.ok().entity(students.get(0)).build();
         }else {
-            throw new RuntimeException("Student with id 0 doesn't exist");
+            return Response.serverError().entity("Student with id 0 doesn't exist").build();
         }
     }
 
